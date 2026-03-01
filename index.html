@@ -746,7 +746,7 @@ let posterCache=loadLS("wl_posters",{});
 DATA.filter(i=>i.type==="manga"||i.type==="anime"||i.type==="anime-film").forEach(i=>{if(posterCache[i.id]===null)delete posterCache[i.id];});
 let overviewCache=loadLS('wl_overview',{});
 
-function saveAll(){
+function _saveLocal(){
   saveLS('wl_watched',[...W]);
   saveLS('wl_ratings',userRatings);
   saveLS('wl_notes',userNotes);
@@ -1409,10 +1409,9 @@ function scheduleSave(){
   syncTimeout = setTimeout(()=>saveToCloud(currentUser.id, getUserData()), 1500);
 }
 
-// ---- Override saveAll to also sync ----
-const _origSaveAll = saveAll;
+// ---- saveAll: local + cloud ----
 function saveAll(){
-  _origSaveAll();
+  _saveLocal();
   scheduleSave();
 }
 
