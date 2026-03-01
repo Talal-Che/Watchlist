@@ -3,297 +3,531 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ma Liste</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<title>Ma Watchlist</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Instrument+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --bg: #0d0d0f;
-    --card: #141417;
-    --border: #222228;
-    --text: #e8e8ec;
-    --muted: #666;
-    --anime: #ff6b35;
-    --film: #4fc3f7;
-    --serie: #a78bfa;
-    --manga: #4ade80;
-  }
-  body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; padding: 40px 20px; }
-  h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 6vw, 5rem); letter-spacing: 0.05em; text-align: center; margin-bottom: 8px; background: linear-gradient(135deg, #fff 30%, #888); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-  .subtitle { text-align: center; color: var(--muted); font-size: 0.85rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 50px; }
-  .tabs { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 40px; }
-  .tab { padding: 8px 20px; border-radius: 100px; border: 1px solid var(--border); background: none; color: var(--muted); cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; transition: all 0.2s; }
-  .tab:hover { color: var(--text); border-color: #444; }
-  .tab.active[data-cat="anime"] { background: var(--anime); color: #000; border-color: var(--anime); }
-  .tab.active[data-cat="film"] { background: var(--film); color: #000; border-color: var(--film); }
-  .tab.active[data-cat="serie"] { background: var(--serie); color: #000; border-color: var(--serie); }
-  .tab.active[data-cat="manga"] { background: var(--manga); color: #000; border-color: var(--manga); }
-  .tab.active[data-cat="all"] { background: #fff; color: #000; border-color: #fff; }
-  .section { margin-bottom: 50px; }
-  .section-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: 0.08em; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; }
-  .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
-  .dot-anime { background: var(--anime); }
-  .dot-film { background: var(--film); }
-  .dot-serie { background: var(--serie); }
-  .dot-manga { background: var(--manga); }
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
-  .item { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; display: flex; align-items: center; gap: 12px; transition: transform 0.15s, border-color 0.15s; }
-  .item:hover { transform: translateY(-2px); }
-  .item:hover.anime { border-color: var(--anime); }
-  .item:hover.film { border-color: var(--film); }
-  .item:hover.serie { border-color: var(--serie); }
-  .item:hover.manga { border-color: var(--manga); }
-  .emoji { font-size: 1.4rem; flex-shrink: 0; width: 28px; text-align: center; }
-  .name { font-size: 0.88rem; font-weight: 400; line-height: 1.3; }
-  .year { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
-  .count { font-size: 0.85rem; color: var(--muted); font-weight: 300; margin-left: auto; }
-  [data-section] { transition: opacity 0.2s; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0a0a0c;
+  --surface: #111114;
+  --card: #16161a;
+  --border: #1e1e24;
+  --border2: #2a2a33;
+  --text: #e2e2ea;
+  --muted: #55555f;
+  --muted2: #888895;
+  --anime: #f97316;
+  --film: #38bdf8;
+  --serie: #c084fc;
+  --manga: #4ade80;
+}
+body { background: var(--bg); color: var(--text); font-family: 'Instrument Sans', sans-serif; min-height: 100vh; }
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 0; opacity: 0.6;
+}
+.wrapper { position: relative; z-index: 1; max-width: 1400px; margin: 0 auto; padding: 50px 24px 80px; }
+
+header { margin-bottom: 44px; }
+.header-top { display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 20px; margin-bottom: 24px; }
+h1 { font-family: 'Syne', sans-serif; font-size: clamp(2.8rem, 7vw, 6rem); font-weight: 800; line-height: 0.88; letter-spacing: -0.02em; }
+h1 .sub { display: block; font-size: 0.19em; font-weight: 700; letter-spacing: 0.28em; text-transform: uppercase; color: var(--muted2); font-family: 'Instrument Sans', sans-serif; margin-bottom: 8px; }
+.stats-bar { display: flex; gap: 20px; flex-wrap: wrap; }
+.stat { text-align: right; }
+.stat-num { font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 800; line-height: 1; }
+.stat-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-top: 2px; }
+.progress-wrap { margin-bottom: 28px; }
+.progress-label { display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--muted2); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 7px; }
+.progress-track { height: 2px; background: var(--border2); border-radius: 99px; overflow: hidden; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, var(--anime) 0%, var(--film) 40%, var(--serie) 70%, var(--manga) 100%); border-radius: 99px; transition: width 0.5s cubic-bezier(.4,0,.2,1); }
+
+.controls { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; }
+.cat-tabs { display: flex; gap: 5px; flex-wrap: wrap; }
+.cat-tab { padding: 7px 15px; border-radius: 100px; border: 1px solid var(--border2); background: none; color: var(--muted2); cursor: pointer; font-family: 'Instrument Sans', sans-serif; font-size: 0.76rem; letter-spacing: 0.04em; transition: all 0.15s; white-space: nowrap; }
+.cat-tab:hover { color: var(--text); border-color: #444; }
+.cat-tab.active { color: #000; font-weight: 500; }
+.cat-tab.active[data-cat="all"]  { background: var(--text); border-color: var(--text); }
+.cat-tab.active[data-cat="anime"] { background: var(--anime); border-color: var(--anime); }
+.cat-tab.active[data-cat="film"]  { background: var(--film);  border-color: var(--film); }
+.cat-tab.active[data-cat="serie"] { background: var(--serie); border-color: var(--serie); }
+.cat-tab.active[data-cat="manga"] { background: var(--manga); border-color: var(--manga); }
+.spacer { flex: 1; min-width: 10px; }
+.search-wrap { position: relative; flex: 1; min-width: 180px; max-width: 280px; }
+.search-wrap svg { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); opacity: 0.35; pointer-events: none; }
+#search { width: 100%; padding: 7px 11px 7px 32px; border-radius: 100px; border: 1px solid var(--border2); background: var(--surface); color: var(--text); font-family: 'Instrument Sans', sans-serif; font-size: 0.76rem; outline: none; transition: border-color 0.15s; }
+#search:focus { border-color: #555; }
+#search::placeholder { color: var(--muted); }
+.btn-filter { display: flex; align-items: center; gap: 6px; padding: 7px 15px; border-radius: 100px; border: 1px solid var(--border2); background: none; color: var(--text); cursor: pointer; font-family: 'Instrument Sans', sans-serif; font-size: 0.76rem; transition: all 0.15s; white-space: nowrap; }
+.btn-filter:hover { background: var(--surface); border-color: #555; }
+.btn-filter.open { background: var(--surface); border-color: #555; }
+.filter-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--anime); display: none; }
+.filter-dot.on { display: block; }
+
+.filter-panel { background: var(--surface); border: 1px solid var(--border2); border-radius: 16px; padding: 20px 22px; margin-bottom: 12px; display: none; gap: 20px; flex-wrap: wrap; }
+.filter-panel.open { display: flex; }
+.fg-title { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 9px; }
+.chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.chip { padding: 3px 10px; border-radius: 100px; border: 1px solid var(--border2); background: none; color: var(--muted2); cursor: pointer; font-family: 'Instrument Sans', sans-serif; font-size: 0.72rem; transition: all 0.12s; }
+.chip:hover { color: var(--text); border-color: #555; }
+.chip.on { background: var(--text); color: #000; border-color: var(--text); font-weight: 500; }
+.sort-row { display: flex; flex-wrap: wrap; gap: 5px; }
+.sort-btn { padding: 5px 11px; border-radius: 8px; border: 1px solid var(--border2); background: none; color: var(--muted2); cursor: pointer; font-family: 'Instrument Sans', sans-serif; font-size: 0.72rem; transition: all 0.12s; }
+.sort-btn:hover { color: var(--text); }
+.sort-btn.on { background: var(--card); color: var(--text); border-color: #555; }
+.fp-footer { width: 100%; display: flex; justify-content: flex-end; padding-top: 10px; border-top: 1px solid var(--border); }
+.btn-clear { padding: 5px 13px; border-radius: 8px; border: 1px solid var(--border2); background: none; color: var(--muted2); cursor: pointer; font-family: 'Instrument Sans', sans-serif; font-size: 0.72rem; transition: all 0.12s; }
+.btn-clear:hover { color: var(--text); }
+
+.bottom-bar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+.results-info { font-size: 0.73rem; color: var(--muted); letter-spacing: 0.04em; }
+.results-info strong { color: var(--text); }
+.show-tabs { display: flex; gap: 5px; }
+.show-btn { padding: 6px 13px; border-radius: 100px; border: 1px solid var(--border2); background: none; color: var(--muted2); cursor: pointer; font-family: 'Instrument Sans', sans-serif; font-size: 0.73rem; transition: all 0.15s; white-space: nowrap; }
+.show-btn:hover { color: var(--text); }
+.show-btn.on { background: var(--surface); color: var(--text); border-color: #555; }
+
+.section { margin-bottom: 44px; }
+.sec-header { display: flex; align-items: center; gap: 9px; margin-bottom: 14px; padding-bottom: 11px; border-bottom: 1px solid var(--border); }
+.sec-line { width: 3px; height: 17px; border-radius: 99px; flex-shrink: 0; }
+.sec-title { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 700; letter-spacing: 0.02em; }
+.sec-count { font-size: 0.7rem; color: var(--muted); letter-spacing: 0.08em; margin-left: auto; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(235px, 1fr)); gap: 7px; }
+
+.item { background: var(--card); border: 1px solid var(--border); border-radius: 11px; padding: 11px 13px; display: flex; align-items: flex-start; gap: 9px; cursor: pointer; transition: transform 0.13s, border-color 0.13s, background 0.18s, opacity 0.18s; user-select: none; }
+.item:hover { transform: translateY(-1px); }
+.item.ta:hover { border-color: rgba(249,115,22,.4); }
+.item.tf:hover { border-color: rgba(56,189,248,.4); }
+.item.ts:hover { border-color: rgba(192,132,252,.4); }
+.item.tm:hover { border-color: rgba(74,222,128,.4); }
+.item.done { background: #0d1a10; border-color: #1a3320; opacity: 0.6; }
+.item.done:hover { opacity: 0.82; }
+.chk { width: 17px; height: 17px; border-radius: 5px; border: 1.5px solid var(--border2); flex-shrink: 0; margin-top: 2px; display: flex; align-items: center; justify-content: center; transition: all 0.13s; }
+.item.done .chk { background: #2a6640; border-color: #3a8050; }
+.item.done .chk::after { content: '✓'; font-size: 9px; color: #4ade80; font-weight: 700; }
+.em { font-size: 1.25rem; flex-shrink: 0; width: 24px; text-align: center; line-height: 1.2; }
+.ib { flex: 1; min-width: 0; }
+.iname { font-size: 0.81rem; line-height: 1.35; color: var(--text); }
+.item.done .iname { text-decoration: line-through; color: var(--muted2); }
+.imeta { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 4px; align-items: center; }
+.iyear { font-size: 0.66rem; color: var(--muted); }
+.igenre { font-size: 0.6rem; padding: 1px 6px; border-radius: 4px; background: var(--border2); color: var(--muted2); letter-spacing: 0.03em; }
+.empty { padding: 48px 24px; text-align: center; color: var(--muted); font-size: 0.88rem; }
+.empty-icon { font-size: 2rem; margin-bottom: 12px; opacity: 0.35; }
+@keyframes fi { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+.item { animation: fi 0.2s ease both; }
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 99px; }
 </style>
 </head>
 <body>
+<div class="wrapper">
+<header>
+  <div class="header-top">
+    <h1><span class="sub">Ma Collection</span>WATCH<br>LIST</h1>
+    <div class="stats-bar">
+      <div class="stat"><div class="stat-num" id="sttotal">—</div><div class="stat-label">Titres</div></div>
+      <div class="stat"><div class="stat-num" id="stwatched" style="color:var(--manga)">—</div><div class="stat-label">Vus / Lus</div></div>
+      <div class="stat"><div class="stat-num" id="stleft" style="color:var(--muted2)">—</div><div class="stat-label">Restants</div></div>
+    </div>
+  </div>
+  <div class="progress-wrap">
+    <div class="progress-label"><span>Progression</span><span id="ppct">0%</span></div>
+    <div class="progress-track"><div class="progress-fill" id="pfill" style="width:0%"></div></div>
+  </div>
+</header>
 
-<h1>Ma Watchlist</h1>
-<p class="subtitle">Films · Séries · Animés · Mangas</p>
-
-<div class="tabs">
-  <button class="tab active" data-cat="all" onclick="filter('all')">Tout</button>
-  <button class="tab" data-cat="anime" onclick="filter('anime')">🎌 Animés</button>
-  <button class="tab" data-cat="film" onclick="filter('film')">🎬 Films</button>
-  <button class="tab" data-cat="serie" onclick="filter('serie')">📺 Séries</button>
-  <button class="tab" data-cat="manga" onclick="filter('manga')">📚 Mangas</button>
+<div class="controls">
+  <div class="cat-tabs">
+    <button class="cat-tab active" data-cat="all">Tout</button>
+    <button class="cat-tab" data-cat="anime">🎌 Animés</button>
+    <button class="cat-tab" data-cat="film">🎬 Films</button>
+    <button class="cat-tab" data-cat="serie">📺 Séries</button>
+    <button class="cat-tab" data-cat="manga">📚 Mangas</button>
+  </div>
+  <div class="spacer"></div>
+  <div class="search-wrap">
+    <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="text" id="search" placeholder="Rechercher...">
+  </div>
+  <button class="btn-filter" id="btnf">
+    <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"/></svg>
+    Filtres &amp; Tri
+    <span class="filter-dot" id="fdot"></span>
+  </button>
 </div>
 
-<!-- ANIME -->
-<div class="section" data-section="anime">
-  <div class="section-title"><span class="dot dot-anime"></span>🎌 ANIMÉS <span class="count" id="count-anime"></span></div>
-  <div class="grid" id="grid-anime"></div>
+<div class="filter-panel" id="fpanel">
+  <div style="flex-basis:100%">
+    <div class="fg-title">Trier par</div>
+    <div class="sort-row">
+      <button class="sort-btn on" data-sort="default">Par défaut</button>
+      <button class="sort-btn" data-sort="alpha-asc">A → Z</button>
+      <button class="sort-btn" data-sort="alpha-desc">Z → A</button>
+      <button class="sort-btn" data-sort="year-asc">Année ↑</button>
+      <button class="sort-btn" data-sort="year-desc">Année ↓</button>
+      <button class="sort-btn" data-sort="unwatched">Non vus d'abord</button>
+      <button class="sort-btn" data-sort="watched-first">Vus d'abord</button>
+    </div>
+  </div>
+  <div style="flex:2; min-width:200px">
+    <div class="fg-title">Genre</div>
+    <div class="chips" id="gchips"></div>
+  </div>
+  <div style="flex:1; min-width:140px">
+    <div class="fg-title">Statut</div>
+    <div class="chips">
+      <button class="chip" data-status="unwatched">🔲 À voir</button>
+      <button class="chip" data-status="watched">✅ Vus / Lus</button>
+    </div>
+  </div>
+  <div style="flex:1; min-width:140px">
+    <div class="fg-title">Décennie</div>
+    <div class="chips" id="dchips"></div>
+  </div>
+  <div class="fp-footer"><button class="btn-clear" id="bclr">Réinitialiser</button></div>
 </div>
 
-<!-- ANIME FILMS -->
-<div class="section" data-section="anime-film">
-  <div class="section-title"><span class="dot dot-anime"></span>🎥 FILMS D'ANIMÉ <span class="count" id="count-anime-film"></span></div>
-  <div class="grid" id="grid-anime-film"></div>
+<div class="bottom-bar">
+  <div class="results-info" id="rinfo"></div>
+  <div class="show-tabs">
+    <button class="show-btn on" data-show="all">Tout</button>
+    <button class="show-btn" data-show="unwatched">À voir</button>
+    <button class="show-btn" data-show="watched">Vus / Lus</button>
+  </div>
 </div>
 
-<!-- FILMS -->
-<div class="section" data-section="film">
-  <div class="section-title"><span class="dot dot-film"></span>🎬 FILMS <span class="count" id="count-film"></span></div>
-  <div class="grid" id="grid-film"></div>
-</div>
-
-<!-- SÉRIES -->
-<div class="section" data-section="serie">
-  <div class="section-title"><span class="dot dot-serie"></span>📺 SÉRIES <span class="count" id="count-serie"></span></div>
-  <div class="grid" id="grid-serie"></div>
-</div>
-
-<!-- MANGAS -->
-<div class="section" data-section="manga">
-  <div class="section-title"><span class="dot dot-manga"></span>📚 MANGAS À LIRE <span class="count" id="count-manga"></span></div>
-  <div class="grid" id="grid-manga"></div>
+<div id="scontainer"></div>
 </div>
 
 <script>
-const data = {
-  anime: [
-    { name: "Helck", emoji: "🏋️", year: "2023" },
-    { name: "Legend of the Galactic Heroes: Die Neue These", emoji: "🌌", year: "2018" },
-    { name: "Cyberpunk Edgerunners", emoji: "🦾", year: "2022" },
-    { name: "I Parry Everything", emoji: "🛡️", year: "2023" },
-    { name: "Samurai Champloo", emoji: "⚔️", year: "2004" },
-    { name: "Neon Genesis Evangelion", emoji: "🤖", year: "1995" },
-    { name: "Planetes", emoji: "🚀", year: "2003" },
-    { name: "Monster", emoji: "🔪", year: "2004" },
-    { name: "Gurren Lagann", emoji: "🌀", year: "2007" },
-    { name: "JoJo's Bizarre Adventure", emoji: "💪", year: "2012" },
-    { name: "Mushoku Tensei", emoji: "🌿", year: "2021" },
-    { name: "Frieren: Beyond Journey's End", emoji: "🧝", year: "2023" },
-    { name: "Dungeon Meshi (Delicious in Dungeon)", emoji: "🍲", year: "2024" },
-    { name: "Orb: On the Movements of the Earth", emoji: "🌍", year: "2024" },
-    { name: "Fate/Zero", emoji: "⚗️", year: "2011" },
-    { name: "Ergo Proxy", emoji: "🎭", year: "2006" },
-    { name: "Black Lagoon", emoji: "🚢", year: "2006" },
-    { name: "Golden Kamuy", emoji: "🦌", year: "2018" },
-    { name: "Gintama", emoji: "🍭", year: "2006" },
-    { name: "Bleach", emoji: "🗡️", year: "2004" },
-    { name: "Tomorrow's Joe", emoji: "🥊", year: "1970" },
-    { name: "Rainbow", emoji: "🌈", year: "2010" },
-    { name: "Chi – Chikyuu no Undou ni Tsuite", emoji: "🌐", year: "2023" },
-    { name: "The Kingdom of Ruin", emoji: "💀", year: "2023" },
-    { name: "Gate", emoji: "🏯", year: "2015" },
-    { name: "Devilman Crybaby", emoji: "😈", year: "2018" },
-    { name: "Pluto", emoji: "🤖", year: "2023" },
-    { name: "Wolf's Rain", emoji: "🐺", year: "2003" },
-    { name: "Banana Fish", emoji: "🍌", year: "2018" },
-    { name: "Texhnolyze", emoji: "🏚️", year: "2003" },
-    { name: "The Daily Life of the Immortal King", emoji: "👑", year: "2020" },
-    { name: "My Hero Academia", emoji: "💥", year: "2016" },
-    { name: "Fire Force", emoji: "🔥", year: "2019" },
-    { name: "To Be Hero X", emoji: "🦸", year: "2024" },
-    { name: "Shangri-La Frontier", emoji: "🎮", year: "2023" },
-    { name: "Primal", emoji: "🦕", year: "2019" },
-    { name: "Apocalypse Bringer Mynoghra", emoji: "👾", year: "" },
-    { name: "Cinderella Gray", emoji: "🐎", year: "2025" },
-    { name: "My Isekai Life", emoji: "🌿", year: "2022" },
-    { name: "Dragon Quest: The Adventure of Dai", emoji: "🐉", year: "2020" },
-    { name: "Ao Ashi", emoji: "⚽", year: "2022" },
-    { name: "Let This Grieving Soul Retire", emoji: "😮‍💨", year: "2023" },
-    { name: "Spy x Family", emoji: "🕵️", year: "2022" },
-  ],
-  "anime-film": [
-    { name: "Vampire Hunter D: Bloodlust", emoji: "🧛", year: "2000" },
-    { name: "Patlabor 2: The Movie", emoji: "🤖", year: "1993" },
-    { name: "That Time I Got Reincarnated as a Slime the Movie: Tears of the Azure Sea", emoji: "🌊", year: "2022" },
-    { name: "Metal Skin Panic MADOX-01", emoji: "🦾", year: "1987" },
-    { name: "Perfect Blue", emoji: "💙", year: "1997" },
-    { name: "Redline", emoji: "🏎️", year: "2009" },
-    { name: "Detective Conan: La Fiancée de Shibuya", emoji: "🔍", year: "2022" },
-  ],
-  film: [
-    { name: "The Hurricane", emoji: "🥊", year: "1999" },
-    { name: "Mystic River", emoji: "🌊", year: "2003" },
-    { name: "Zodiac", emoji: "🔭", year: "2007" },
-    { name: "Eyes Wide Shut", emoji: "👁️", year: "1999" },
-    { name: "Ray", emoji: "🎹", year: "2004" },
-    { name: "Capote", emoji: "✒️", year: "2005" },
-    { name: "The Last King of Scotland", emoji: "🦁", year: "2006" },
-    { name: "Lincoln", emoji: "🎩", year: "2012" },
-    { name: "Dallas Buyers Club", emoji: "💊", year: "2013" },
-    { name: "Wind River", emoji: "❄️", year: "2017" },
-    { name: "Another Round", emoji: "🍺", year: "2020" },
-    { name: "Se7en", emoji: "🕵️", year: "1995" },
-    { name: "The Godfather I, II & III", emoji: "🌹", year: "1972" },
-    { name: "Good Will Hunting", emoji: "📐", year: "1997" },
-    { name: "Little Miss Sunshine", emoji: "🚌", year: "2006" },
-    { name: "Taxi Driver", emoji: "🚖", year: "1976" },
-    { name: "The Lighthouse", emoji: "🔦", year: "2019" },
-    { name: "Primal Fear", emoji: "⚖️", year: "1996" },
-    { name: "Hamnet", emoji: "📜", year: "2025" },
-    { name: "Hell or High Water", emoji: "🤠", year: "2016" },
-    { name: "Parasite", emoji: "🏠", year: "2019" },
-    { name: "Oldboy", emoji: "🔨", year: "2003" },
-    { name: "Memories of Murder", emoji: "🕵️", year: "2003" },
-    { name: "The Color of Paradise", emoji: "🌸", year: "1999" },
-    { name: "A Separation", emoji: "💔", year: "2011" },
-    { name: "The Fighter", emoji: "🥊", year: "2010" },
-    { name: "The Score", emoji: "💰", year: "2001" },
-    { name: "Philadelphia", emoji: "⚖️", year: "1993" },
-    { name: "Mean Streets", emoji: "🗽", year: "1973" },
-    { name: "Dead Poets Society", emoji: "📖", year: "1989" },
-    { name: "Braveheart", emoji: "🏴󠁧󠁢󠁳󠁣󠁴󠁿", year: "1995" },
-    { name: "The 13th Warrior", emoji: "🪓", year: "1999" },
-    { name: "Warcraft", emoji: "🧙", year: "2016" },
-    { name: "Prisoners", emoji: "⛓️", year: "2013" },
-    { name: "A Time to Kill", emoji: "⚖️", year: "1996" },
-    { name: "The Painted Veil", emoji: "🎨", year: "2006" },
-    { name: "The Banker", emoji: "💵", year: "2020" },
-    { name: "Tucker: The Man and His Dream", emoji: "🚗", year: "1988" },
-    { name: "The Villagers (Dongnesaramdeul)", emoji: "🏘️", year: "2022" },
-    { name: "The Gangster, the Cop, the Devil", emoji: "🔫", year: "2019" },
-    { name: "Ford v Ferrari", emoji: "🏁", year: "2019" },
-    { name: "F1", emoji: "🏎️", year: "2025" },
-    { name: "Rush", emoji: "🏎️", year: "2013" },
-    { name: "Drive", emoji: "🌃", year: "2011" },
-    { name: "Ran", emoji: "⛩️", year: "1985" },
-    { name: "Citizen Kane", emoji: "🎥", year: "1941" },
-    { name: "Silence", emoji: "🕯️", year: "2016" },
-    { name: "The Smashing Machine", emoji: "🥊", year: "2025" },
-    { name: "My Left Foot", emoji: "🦶", year: "1989" },
-    { name: "They Live", emoji: "👽", year: "1988" },
-    { name: "Planet of the Apes", emoji: "🦍", year: "1968" },
-    { name: "The Battle of Algiers", emoji: "🪖", year: "1966" },
-    { name: "Spotlight", emoji: "📰", year: "2015" },
-    { name: "Deepwater Horizon", emoji: "🛢️", year: "2016" },
-    { name: "Bad Boys: Ride or Die", emoji: "💥", year: "2024" },
-    { name: "Something the Lord Made", emoji: "❤️‍🩹", year: "2004" },
-    { name: "Demolition", emoji: "🔨", year: "2015" },
-    { name: "Brothers", emoji: "🎖️", year: "2009" },
-    { name: "The Machinist", emoji: "🏭", year: "2004" },
-    { name: "Incendies", emoji: "🔥", year: "2010" },
-    { name: "Kids", emoji: "🛹", year: "1995" },
-    { name: "Hero (Zhang Yimou)", emoji: "🏹", year: "2002" },
-    { name: "Meet Joe Black", emoji: "💀", year: "1998" },
-    { name: "King Arthur", emoji: "⚔️", year: "2004" },
-    { name: "Big (2024)", emoji: "🎬", year: "2024" },
-    { name: "Virgin Territory", emoji: "🏰", year: "2007" },
-  ],
-  serie: [
-    { name: "Mindhunter", emoji: "🧠", year: "2017" },
-    { name: "Fargo", emoji: "❄️", year: "2014" },
-    { name: "Ozark", emoji: "💵", year: "2017" },
-    { name: "The Sopranos", emoji: "🍝", year: "1999" },
-    { name: "Mad Men", emoji: "🥃", year: "2007" },
-    { name: "Succession", emoji: "🏢", year: "2018" },
-    { name: "House of Cards", emoji: "🃏", year: "2013" },
-    { name: "Twin Peaks", emoji: "☕", year: "1990" },
-    { name: "Lost", emoji: "🏝️", year: "2004" },
-    { name: "Prison Break", emoji: "🔓", year: "2005" },
-    { name: "Severance", emoji: "🪪", year: "2022" },
-    { name: "Westworld", emoji: "🤠", year: "2016" },
-    { name: "Six Feet Under", emoji: "⚰️", year: "2001" },
-    { name: "The Leftovers", emoji: "🕊️", year: "2014" },
-    { name: "Person of Interest", emoji: "📷", year: "2011" },
-    { name: "Outlander", emoji: "🏴󠁧󠁢󠁳󠁣󠁴󠁿", year: "2014" },
-    { name: "Dexter", emoji: "🔪", year: "2006" },
-    { name: "Band of Brothers", emoji: "🎖️", year: "2001" },
-    { name: "The Penguin", emoji: "🐧", year: "2024" },
-    { name: "A Knight of the Seven Kingdoms", emoji: "⚔️", year: "2024" },
-    { name: "Invincible", emoji: "🦸", year: "2021" },
-    { name: "Black Sails", emoji: "☠️", year: "2014" },
-    { name: "The Boys", emoji: "💥", year: "2019" },
-    { name: "Godfather of Harlem", emoji: "🎷", year: "2019" },
-  ],
-  manga: [
-    { name: "Vinland Saga", emoji: "⚔️", year: "2005" },
-    { name: "Berserk", emoji: "🗡️", year: "1989" },
-    { name: "Homunculus", emoji: "🧠", year: "2003" },
-    { name: "The Climber", emoji: "🧗", year: "1994" },
-    { name: "20th Century Boys", emoji: "🤖", year: "1999" },
-    { name: "Usogui", emoji: "🎲", year: "2006" },
-    { name: "Gon", emoji: "🦕", year: "1991" },
-    { name: "Slam Dunk", emoji: "🏀", year: "1990" },
-    { name: "Steel Ball Run (JoJo Part 7)", emoji: "🐎", year: "2004" },
-    { name: "Yotsuba&!", emoji: "🌻", year: "2003" },
-    { name: "Oyasumi Punpun", emoji: "🕊️", year: "2007" },
-    { name: "A Bride's Story", emoji: "🧵", year: "2008" },
-    { name: "Veil", emoji: "🌫️", year: "" },
-    { name: "Real", emoji: "🏀", year: "1999" },
-    { name: "JoJo's Bizarre Adventure", emoji: "💪", year: "1987" },
-    { name: "Grand Blue", emoji: "🤿", year: "2014" },
-  ]
+const DATA = [
+  {id:1,name:"Helck",emoji:"🏋️",year:2023,type:"anime",genres:["action","fantasy"]},
+  {id:2,name:"Legend of the Galactic Heroes: Die Neue These",emoji:"🌌",year:2018,type:"anime",genres:["sci-fi","drama"]},
+  {id:3,name:"Cyberpunk Edgerunners",emoji:"🦾",year:2022,type:"anime",genres:["sci-fi","action","drama"]},
+  {id:4,name:"I Parry Everything",emoji:"🛡️",year:2023,type:"anime",genres:["fantasy","comedy"]},
+  {id:5,name:"Samurai Champloo",emoji:"⚔️",year:2004,type:"anime",genres:["action","adventure"]},
+  {id:6,name:"Neon Genesis Evangelion",emoji:"🤖",year:1995,type:"anime",genres:["sci-fi","drama","mecha"]},
+  {id:7,name:"Planetes",emoji:"🚀",year:2003,type:"anime",genres:["sci-fi","drama"]},
+  {id:8,name:"Monster",emoji:"🔪",year:2004,type:"anime",genres:["thriller","drama","mystery"]},
+  {id:9,name:"Gurren Lagann",emoji:"🌀",year:2007,type:"anime",genres:["action","mecha","sci-fi"]},
+  {id:10,name:"JoJo's Bizarre Adventure",emoji:"💪",year:2012,type:"anime",genres:["action","adventure","fantasy"]},
+  {id:11,name:"Mushoku Tensei",emoji:"🌿",year:2021,type:"anime",genres:["fantasy","adventure","isekai"]},
+  {id:12,name:"Frieren: Beyond Journey's End",emoji:"🧝",year:2023,type:"anime",genres:["fantasy","drama","adventure"]},
+  {id:13,name:"Dungeon Meshi",emoji:"🍲",year:2024,type:"anime",genres:["fantasy","comedy","adventure"]},
+  {id:14,name:"Orb: On the Movements of the Earth",emoji:"🌍",year:2024,type:"anime",genres:["historical","drama"]},
+  {id:15,name:"Fate/Zero",emoji:"⚗️",year:2011,type:"anime",genres:["fantasy","action","thriller"]},
+  {id:16,name:"Ergo Proxy",emoji:"🎭",year:2006,type:"anime",genres:["sci-fi","mystery","dystopia"]},
+  {id:17,name:"Black Lagoon",emoji:"🚢",year:2006,type:"anime",genres:["action","crime"]},
+  {id:18,name:"Golden Kamuy",emoji:"🦌",year:2018,type:"anime",genres:["historical","adventure","action"]},
+  {id:19,name:"Gintama",emoji:"🍭",year:2006,type:"anime",genres:["comedy","action","sci-fi"]},
+  {id:20,name:"Bleach",emoji:"🗡️",year:2004,type:"anime",genres:["action","fantasy","shounen"]},
+  {id:21,name:"Tomorrow's Joe",emoji:"🥊",year:1970,type:"anime",genres:["sport","drama"]},
+  {id:22,name:"Rainbow",emoji:"🌈",year:2010,type:"anime",genres:["drama","crime","historical"]},
+  {id:23,name:"Chi – Chikyuu no Undou ni Tsuite",emoji:"🌐",year:2023,type:"anime",genres:["historical","drama"]},
+  {id:24,name:"The Kingdom of Ruin",emoji:"💀",year:2023,type:"anime",genres:["action","fantasy","drama"]},
+  {id:25,name:"Gate",emoji:"🏯",year:2015,type:"anime",genres:["action","fantasy","military"]},
+  {id:26,name:"Devilman Crybaby",emoji:"😈",year:2018,type:"anime",genres:["action","horror","drama"]},
+  {id:27,name:"Pluto",emoji:"🤖",year:2023,type:"anime",genres:["sci-fi","mystery","drama"]},
+  {id:28,name:"Wolf's Rain",emoji:"🐺",year:2003,type:"anime",genres:["sci-fi","adventure","drama"]},
+  {id:29,name:"Banana Fish",emoji:"🍌",year:2018,type:"anime",genres:["action","crime","drama"]},
+  {id:30,name:"Texhnolyze",emoji:"🏚️",year:2003,type:"anime",genres:["sci-fi","dystopia","drama"]},
+  {id:31,name:"The Daily Life of the Immortal King",emoji:"👑",year:2020,type:"anime",genres:["fantasy","comedy","isekai"]},
+  {id:32,name:"My Hero Academia",emoji:"💥",year:2016,type:"anime",genres:["action","superhero","shounen"]},
+  {id:33,name:"Fire Force",emoji:"🔥",year:2019,type:"anime",genres:["action","fantasy","shounen"]},
+  {id:34,name:"To Be Hero X",emoji:"🦸",year:2024,type:"anime",genres:["action","comedy"]},
+  {id:35,name:"Shangri-La Frontier",emoji:"🎮",year:2023,type:"anime",genres:["fantasy","action","isekai"]},
+  {id:36,name:"Primal",emoji:"🦕",year:2019,type:"anime",genres:["action","adventure"]},
+  {id:37,name:"Apocalypse Bringer Mynoghra",emoji:"👾",year:null,type:"anime",genres:["fantasy","strategy"]},
+  {id:38,name:"Cinderella Gray",emoji:"🐎",year:2025,type:"anime",genres:["sport","drama"]},
+  {id:39,name:"My Isekai Life",emoji:"🌿",year:2022,type:"anime",genres:["fantasy","isekai","adventure"]},
+  {id:40,name:"Dragon Quest: The Adventure of Dai",emoji:"🐉",year:2020,type:"anime",genres:["action","fantasy","adventure"]},
+  {id:41,name:"Ao Ashi",emoji:"⚽",year:2022,type:"anime",genres:["sport","drama"]},
+  {id:42,name:"Let This Grieving Soul Retire",emoji:"😮‍💨",year:2023,type:"anime",genres:["fantasy","comedy"]},
+  {id:43,name:"Spy x Family",emoji:"🕵️",year:2022,type:"anime",genres:["action","comedy","family"]},
+  // Anime Films
+  {id:101,name:"Vampire Hunter D: Bloodlust",emoji:"🧛",year:2000,type:"anime-film",genres:["action","horror","fantasy"]},
+  {id:102,name:"Patlabor 2: The Movie",emoji:"🤖",year:1993,type:"anime-film",genres:["mecha","sci-fi","thriller"]},
+  {id:103,name:"Slime Movie: Tears of the Azure Sea",emoji:"🌊",year:2022,type:"anime-film",genres:["fantasy","isekai","adventure"]},
+  {id:104,name:"Metal Skin Panic MADOX-01",emoji:"🦾",year:1987,type:"anime-film",genres:["mecha","action","comedy"]},
+  {id:105,name:"Perfect Blue",emoji:"💙",year:1997,type:"anime-film",genres:["thriller","horror","drama"]},
+  {id:106,name:"Redline",emoji:"🏎️",year:2009,type:"anime-film",genres:["action","sci-fi","sport"]},
+  {id:107,name:"Detective Conan: La Fiancée de Shibuya",emoji:"🔍",year:2022,type:"anime-film",genres:["mystery","thriller","action"]},
+  // Films
+  {id:201,name:"The Hurricane",emoji:"🥊",year:1999,type:"film",genres:["biopic","drama","sport"]},
+  {id:202,name:"Mystic River",emoji:"🌊",year:2003,type:"film",genres:["thriller","drama","mystery"]},
+  {id:203,name:"Zodiac",emoji:"🔭",year:2007,type:"film",genres:["thriller","crime","mystery"]},
+  {id:204,name:"Eyes Wide Shut",emoji:"👁️",year:1999,type:"film",genres:["thriller","mystery","drama"]},
+  {id:205,name:"Ray",emoji:"🎹",year:2004,type:"film",genres:["biopic","drama","music"]},
+  {id:206,name:"Capote",emoji:"✒️",year:2005,type:"film",genres:["biopic","drama","crime"]},
+  {id:207,name:"The Last King of Scotland",emoji:"🦁",year:2006,type:"film",genres:["biopic","thriller","drama"]},
+  {id:208,name:"Lincoln",emoji:"🎩",year:2012,type:"film",genres:["biopic","historical","drama"]},
+  {id:209,name:"Dallas Buyers Club",emoji:"💊",year:2013,type:"film",genres:["biopic","drama"]},
+  {id:210,name:"Wind River",emoji:"❄️",year:2017,type:"film",genres:["thriller","crime","drama"]},
+  {id:211,name:"Another Round",emoji:"🍺",year:2020,type:"film",genres:["drama","comedy"]},
+  {id:212,name:"Se7en",emoji:"🕵️",year:1995,type:"film",genres:["thriller","crime","mystery"]},
+  {id:213,name:"The Godfather I, II & III",emoji:"🌹",year:1972,type:"film",genres:["crime","drama"]},
+  {id:214,name:"Good Will Hunting",emoji:"📐",year:1997,type:"film",genres:["drama"]},
+  {id:215,name:"Little Miss Sunshine",emoji:"🚌",year:2006,type:"film",genres:["comedy","drama"]},
+  {id:216,name:"Taxi Driver",emoji:"🚖",year:1976,type:"film",genres:["thriller","crime","drama"]},
+  {id:217,name:"The Lighthouse",emoji:"🔦",year:2019,type:"film",genres:["horror","thriller","drama"]},
+  {id:218,name:"Primal Fear",emoji:"⚖️",year:1996,type:"film",genres:["thriller","crime","drama"]},
+  {id:219,name:"Hamnet",emoji:"📜",year:2025,type:"film",genres:["historical","drama"]},
+  {id:220,name:"Hell or High Water",emoji:"🤠",year:2016,type:"film",genres:["crime","thriller","western"]},
+  {id:221,name:"Parasite",emoji:"🏠",year:2019,type:"film",genres:["thriller","drama","comedy"]},
+  {id:222,name:"Oldboy",emoji:"🔨",year:2003,type:"film",genres:["thriller","mystery","drama"]},
+  {id:223,name:"Memories of Murder",emoji:"🕵️",year:2003,type:"film",genres:["crime","thriller","drama"]},
+  {id:224,name:"The Color of Paradise",emoji:"🌸",year:1999,type:"film",genres:["drama","family"]},
+  {id:225,name:"A Separation",emoji:"💔",year:2011,type:"film",genres:["drama"]},
+  {id:226,name:"The Fighter",emoji:"🥊",year:2010,type:"film",genres:["biopic","drama","sport"]},
+  {id:227,name:"The Score",emoji:"💰",year:2001,type:"film",genres:["crime","thriller"]},
+  {id:228,name:"Philadelphia",emoji:"⚖️",year:1993,type:"film",genres:["drama"]},
+  {id:229,name:"Mean Streets",emoji:"🗽",year:1973,type:"film",genres:["crime","drama"]},
+  {id:230,name:"Dead Poets Society",emoji:"📖",year:1989,type:"film",genres:["drama"]},
+  {id:231,name:"Braveheart",emoji:"🏴󠁧󠁢󠁳󠁣󠁴󠁿",year:1995,type:"film",genres:["historical","action","drama"]},
+  {id:232,name:"The 13th Warrior",emoji:"🪓",year:1999,type:"film",genres:["historical","action","adventure"]},
+  {id:233,name:"Warcraft",emoji:"🧙",year:2016,type:"film",genres:["fantasy","action","adventure"]},
+  {id:234,name:"Prisoners",emoji:"⛓️",year:2013,type:"film",genres:["thriller","mystery","drama"]},
+  {id:235,name:"A Time to Kill",emoji:"⚖️",year:1996,type:"film",genres:["thriller","drama","crime"]},
+  {id:236,name:"The Painted Veil",emoji:"🎨",year:2006,type:"film",genres:["romance","drama"]},
+  {id:237,name:"The Banker",emoji:"💵",year:2020,type:"film",genres:["biopic","drama"]},
+  {id:238,name:"Tucker: The Man and His Dream",emoji:"🚗",year:1988,type:"film",genres:["biopic","drama"]},
+  {id:239,name:"The Villagers (Dongnesaramdeul)",emoji:"🏘️",year:2022,type:"film",genres:["thriller","mystery"]},
+  {id:240,name:"The Gangster, the Cop, the Devil",emoji:"🔫",year:2019,type:"film",genres:["crime","action","thriller"]},
+  {id:241,name:"Ford v Ferrari",emoji:"🏁",year:2019,type:"film",genres:["biopic","drama","sport"]},
+  {id:242,name:"F1",emoji:"🏎️",year:2025,type:"film",genres:["sport","drama","action"]},
+  {id:243,name:"Rush",emoji:"🏎️",year:2013,type:"film",genres:["biopic","sport","drama"]},
+  {id:244,name:"Drive",emoji:"🌃",year:2011,type:"film",genres:["action","thriller","crime"]},
+  {id:245,name:"Ran",emoji:"⛩️",year:1985,type:"film",genres:["historical","drama","action"]},
+  {id:246,name:"Citizen Kane",emoji:"🎥",year:1941,type:"film",genres:["drama","mystery"]},
+  {id:247,name:"Silence",emoji:"🕯️",year:2016,type:"film",genres:["historical","drama"]},
+  {id:248,name:"The Smashing Machine",emoji:"🥊",year:2025,type:"film",genres:["biopic","sport","drama"]},
+  {id:249,name:"My Left Foot",emoji:"🦶",year:1989,type:"film",genres:["biopic","drama"]},
+  {id:250,name:"They Live",emoji:"👽",year:1988,type:"film",genres:["sci-fi","action","horror"]},
+  {id:251,name:"Planet of the Apes",emoji:"🦍",year:1968,type:"film",genres:["sci-fi","action"]},
+  {id:252,name:"The Battle of Algiers",emoji:"🪖",year:1966,type:"film",genres:["historical","drama","war"]},
+  {id:253,name:"Spotlight",emoji:"📰",year:2015,type:"film",genres:["drama","crime","mystery"]},
+  {id:254,name:"Deepwater Horizon",emoji:"🛢️",year:2016,type:"film",genres:["thriller","drama","action"]},
+  {id:255,name:"Bad Boys: Ride or Die",emoji:"💥",year:2024,type:"film",genres:["action","comedy","crime"]},
+  {id:256,name:"Something the Lord Made",emoji:"❤️‍🩹",year:2004,type:"film",genres:["biopic","drama"]},
+  {id:257,name:"Demolition",emoji:"🔨",year:2015,type:"film",genres:["drama"]},
+  {id:258,name:"Brothers",emoji:"🎖️",year:2009,type:"film",genres:["drama","war"]},
+  {id:259,name:"The Machinist",emoji:"🏭",year:2004,type:"film",genres:["thriller","mystery","drama"]},
+  {id:260,name:"Incendies",emoji:"🔥",year:2010,type:"film",genres:["drama","mystery","war"]},
+  {id:261,name:"Kids",emoji:"🛹",year:1995,type:"film",genres:["drama"]},
+  {id:262,name:"Hero (Zhang Yimou)",emoji:"🏹",year:2002,type:"film",genres:["action","historical","martial arts"]},
+  {id:263,name:"Meet Joe Black",emoji:"💀",year:1998,type:"film",genres:["romance","drama","fantasy"]},
+  {id:264,name:"King Arthur",emoji:"⚔️",year:2004,type:"film",genres:["historical","action","adventure"]},
+  {id:265,name:"Virgin Territory",emoji:"🏰",year:2007,type:"film",genres:["comedy","adventure","romance"]},
+  {id:266,name:"Jujutsu Kaisen 0",emoji:"🌸",year:2021,type:"film",genres:["action","fantasy","horror"]},
+  // Séries
+  {id:301,name:"Mindhunter",emoji:"🧠",year:2017,type:"serie",genres:["thriller","crime","drama"]},
+  {id:302,name:"Fargo",emoji:"❄️",year:2014,type:"serie",genres:["crime","thriller","comedy"]},
+  {id:303,name:"Ozark",emoji:"💵",year:2017,type:"serie",genres:["crime","thriller","drama"]},
+  {id:304,name:"The Sopranos",emoji:"🍝",year:1999,type:"serie",genres:["crime","drama"]},
+  {id:305,name:"Mad Men",emoji:"🥃",year:2007,type:"serie",genres:["drama"]},
+  {id:306,name:"Succession",emoji:"🏢",year:2018,type:"serie",genres:["drama","comedy"]},
+  {id:307,name:"House of Cards",emoji:"🃏",year:2013,type:"serie",genres:["thriller","drama","politics"]},
+  {id:308,name:"Twin Peaks",emoji:"☕",year:1990,type:"serie",genres:["mystery","thriller","drama"]},
+  {id:309,name:"Lost",emoji:"🏝️",year:2004,type:"serie",genres:["mystery","drama","sci-fi"]},
+  {id:310,name:"Prison Break",emoji:"🔓",year:2005,type:"serie",genres:["thriller","crime","action"]},
+  {id:311,name:"Severance",emoji:"🪪",year:2022,type:"serie",genres:["sci-fi","thriller","mystery"]},
+  {id:312,name:"Westworld",emoji:"🤠",year:2016,type:"serie",genres:["sci-fi","thriller","western"]},
+  {id:313,name:"Six Feet Under",emoji:"⚰️",year:2001,type:"serie",genres:["drama","comedy"]},
+  {id:314,name:"The Leftovers",emoji:"🕊️",year:2014,type:"serie",genres:["drama","mystery","sci-fi"]},
+  {id:315,name:"Person of Interest",emoji:"📷",year:2011,type:"serie",genres:["sci-fi","thriller","action"]},
+  {id:316,name:"Outlander",emoji:"🏴󠁧󠁢󠁳󠁣󠁴󠁿",year:2014,type:"serie",genres:["historical","romance","drama","fantasy"]},
+  {id:317,name:"Dexter",emoji:"🔪",year:2006,type:"serie",genres:["thriller","crime","drama"]},
+  {id:318,name:"Band of Brothers",emoji:"🎖️",year:2001,type:"serie",genres:["war","drama","historical"]},
+  {id:319,name:"The Penguin",emoji:"🐧",year:2024,type:"serie",genres:["crime","action","drama"]},
+  {id:320,name:"A Knight of the Seven Kingdoms",emoji:"⚔️",year:2024,type:"serie",genres:["fantasy","historical","drama"]},
+  {id:321,name:"Invincible",emoji:"🦸",year:2021,type:"serie",genres:["action","superhero","drama"]},
+  {id:322,name:"Black Sails",emoji:"☠️",year:2014,type:"serie",genres:["adventure","action","historical"]},
+  {id:323,name:"The Boys",emoji:"💥",year:2019,type:"serie",genres:["action","superhero","comedy","drama"]},
+  {id:324,name:"Godfather of Harlem",emoji:"🎷",year:2019,type:"serie",genres:["crime","drama","historical"]},
+  // Mangas
+  {id:401,name:"Vinland Saga",emoji:"⚔️",year:2005,type:"manga",genres:["historical","action","adventure"]},
+  {id:402,name:"Berserk",emoji:"🗡️",year:1989,type:"manga",genres:["dark fantasy","action","horror"]},
+  {id:403,name:"Homunculus",emoji:"🧠",year:2003,type:"manga",genres:["mystery","psychological","horror"]},
+  {id:404,name:"The Climber",emoji:"🧗",year:1994,type:"manga",genres:["sport","drama","adventure"]},
+  {id:405,name:"20th Century Boys",emoji:"🤖",year:1999,type:"manga",genres:["mystery","sci-fi","thriller"]},
+  {id:406,name:"Usogui",emoji:"🎲",year:2006,type:"manga",genres:["thriller","strategy","action"]},
+  {id:407,name:"Gon",emoji:"🦕",year:1991,type:"manga",genres:["adventure","action"]},
+  {id:408,name:"Slam Dunk",emoji:"🏀",year:1990,type:"manga",genres:["sport","comedy","drama"]},
+  {id:409,name:"Steel Ball Run (JoJo Part 7)",emoji:"🐎",year:2004,type:"manga",genres:["action","adventure","fantasy"]},
+  {id:410,name:"Yotsuba&!",emoji:"🌻",year:2003,type:"manga",genres:["comedy","slice of life"]},
+  {id:411,name:"Oyasumi Punpun",emoji:"🕊️",year:2007,type:"manga",genres:["drama","psychological","slice of life"]},
+  {id:412,name:"A Bride's Story",emoji:"🧵",year:2008,type:"manga",genres:["historical","romance","drama"]},
+  {id:413,name:"Veil",emoji:"🌫️",year:null,type:"manga",genres:["mystery","thriller"]},
+  {id:414,name:"Real",emoji:"🏀",year:1999,type:"manga",genres:["sport","drama"]},
+  {id:415,name:"JoJo's Bizarre Adventure",emoji:"💪",year:1987,type:"manga",genres:["action","adventure","fantasy"]},
+  {id:416,name:"Grand Blue",emoji:"🤿",year:2014,type:"manga",genres:["comedy","slice of life"]},
+];
+
+const TYPE_META = {
+  'anime':     {label:'🎌 ANIMÉS',        cls:'ta', accent:'var(--anime)'},
+  'anime-film':{label:'🎥 FILMS D\'ANIMÉ', cls:'ta', accent:'var(--anime)'},
+  'film':      {label:'🎬 FILMS',          cls:'tf', accent:'var(--film)'},
+  'serie':     {label:'📺 SÉRIES',         cls:'ts', accent:'var(--serie)'},
+  'manga':     {label:'📚 MANGAS À LIRE',  cls:'tm', accent:'var(--manga)'},
 };
+const TYPE_ORDER = ['anime','anime-film','film','serie','manga'];
 
-function render() {
-  ['anime','anime-film','film','serie','manga'].forEach(cat => {
-    const key = cat === 'anime-film' ? 'anime-film' : cat;
-    const items = data[key] || data[cat];
-    const grid = document.getElementById('grid-' + cat);
-    const count = document.getElementById('count-' + cat);
-    if (!grid) return;
-    count.textContent = items.length + ' titres';
-    grid.innerHTML = items.map(i => `
-      <div class="item ${cat === 'anime-film' ? 'anime' : cat}">
-        <span class="emoji">${i.emoji}</span>
-        <div>
-          <div class="name">${i.name}</div>
-          ${i.year ? `<div class="year">${i.year}</div>` : ''}
-        </div>
-      </div>`).join('');
+let W = new Set(JSON.parse(localStorage.getItem('wl_watched')||'[]'));
+function save(){ localStorage.setItem('wl_watched', JSON.stringify([...W])); }
+
+let S = { cat:'all', genres:new Set(), status:null, decades:new Set(), sort:'default', show:'all', q:'' };
+
+// Build genre/decade chips
+const allGenres = [...new Set(DATA.flatMap(i=>i.genres))].sort();
+const allDecades = [...new Set(DATA.filter(i=>i.year).map(i=>Math.floor(i.year/10)*10))].sort();
+
+document.getElementById('gchips').innerHTML = allGenres.map(g=>`<button class="chip" data-g="${g}">${g}</button>`).join('');
+document.getElementById('dchips').innerHTML = allDecades.map(d=>`<button class="chip" data-d="${d}">${d}s</button>`).join('');
+
+document.getElementById('gchips').addEventListener('click',e=>{
+  const b=e.target.closest('[data-g]'); if(!b)return;
+  const g=b.dataset.g;
+  S.genres.has(g)?S.genres.delete(g):S.genres.add(g);
+  b.classList.toggle('on'); dot(); go();
+});
+document.getElementById('dchips').addEventListener('click',e=>{
+  const b=e.target.closest('[data-d]'); if(!b)return;
+  const d=parseInt(b.dataset.d);
+  S.decades.has(d)?S.decades.delete(d):S.decades.add(d);
+  b.classList.toggle('on'); dot(); go();
+});
+document.querySelectorAll('[data-status]').forEach(b=>{
+  b.addEventListener('click',()=>{
+    const s=b.dataset.status;
+    if(S.status===s){S.status=null;b.classList.remove('on');}
+    else{document.querySelectorAll('[data-status]').forEach(x=>x.classList.remove('on'));S.status=s;b.classList.add('on');}
+    dot(); go();
   });
+});
+document.querySelectorAll('[data-sort]').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('[data-sort]').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on'); S.sort=b.dataset.sort; dot(); go();
+  });
+});
+document.querySelectorAll('.cat-tab').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('.cat-tab').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active'); S.cat=b.dataset.cat; go();
+  });
+});
+document.querySelectorAll('.show-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('.show-btn').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on'); S.show=b.dataset.show; go();
+  });
+});
+document.getElementById('search').addEventListener('input',e=>{S.q=e.target.value; go();});
+document.getElementById('btnf').addEventListener('click',()=>{
+  document.getElementById('fpanel').classList.toggle('open');
+  document.getElementById('btnf').classList.toggle('open');
+});
+document.getElementById('bclr').addEventListener('click',()=>{
+  S.genres.clear(); S.decades.clear(); S.status=null; S.sort='default';
+  document.querySelectorAll('.chip.on,[data-status].on').forEach(x=>x.classList.remove('on'));
+  document.querySelectorAll('[data-sort]').forEach(x=>x.classList.remove('on'));
+  document.querySelector('[data-sort="default"]').classList.add('on');
+  dot(); go();
+});
+
+function dot(){
+  const on=S.genres.size||S.decades.size||S.status!==null||S.sort!=='default';
+  document.getElementById('fdot').classList.toggle('on',on);
 }
 
-function filter(cat) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.querySelector(`.tab[data-cat="${cat}"]`).classList.add('active');
-  document.querySelectorAll('[data-section]').forEach(s => {
-    const sec = s.dataset.section;
-    if (cat === 'all') { s.style.display = ''; }
-    else if (cat === 'anime') { s.style.display = (sec === 'anime' || sec === 'anime-film') ? '' : 'none'; }
-    else { s.style.display = sec === cat ? '' : 'none'; }
-  });
+function filtered(){
+  let items=[...DATA];
+  const q=S.q.toLowerCase().trim();
+  if(S.cat!=='all'){
+    if(S.cat==='anime') items=items.filter(i=>i.type==='anime'||i.type==='anime-film');
+    else items=items.filter(i=>i.type===S.cat);
+  }
+  if(q) items=items.filter(i=>i.name.toLowerCase().includes(q));
+  if(S.genres.size) items=items.filter(i=>[...S.genres].every(g=>i.genres.includes(g)));
+  if(S.decades.size) items=items.filter(i=>i.year&&S.decades.has(Math.floor(i.year/10)*10));
+  if(S.status==='watched') items=items.filter(i=>W.has(i.id));
+  if(S.status==='unwatched') items=items.filter(i=>!W.has(i.id));
+  if(S.show==='watched') items=items.filter(i=>W.has(i.id));
+  if(S.show==='unwatched') items=items.filter(i=>!W.has(i.id));
+  switch(S.sort){
+    case 'alpha-asc':  items.sort((a,b)=>a.name.localeCompare(b.name)); break;
+    case 'alpha-desc': items.sort((a,b)=>b.name.localeCompare(a.name)); break;
+    case 'year-asc':   items.sort((a,b)=>(a.year||9999)-(b.year||9999)); break;
+    case 'year-desc':  items.sort((a,b)=>(b.year||0)-(a.year||0)); break;
+    case 'unwatched':  items.sort((a,b)=>W.has(a.id)-W.has(b.id)); break;
+    case 'watched-first': items.sort((a,b)=>W.has(b.id)-W.has(a.id)); break;
+  }
+  return items;
 }
 
-render();
+function go(){
+  const items=filtered();
+  const groups={};
+  TYPE_ORDER.forEach(t=>groups[t]=[]);
+  items.forEach(i=>{if(groups[i.type])groups[i.type].push(i);});
+
+  let html=''; let total=0;
+  TYPE_ORDER.forEach(type=>{
+    const list=groups[type]; if(!list.length)return;
+    total+=list.length;
+    const m=TYPE_META[type];
+    html+=`<div class="section">
+      <div class="sec-header">
+        <span class="sec-line" style="background:${m.accent}"></span>
+        <span class="sec-title">${m.label}</span>
+        <span class="sec-count">${list.length} titre${list.length>1?'s':''}</span>
+      </div>
+      <div class="grid">
+        ${list.map((it,idx)=>{
+          const done=W.has(it.id);
+          return `<div class="item ${m.cls} ${done?'done':''}" data-id="${it.id}" style="animation-delay:${Math.min(idx*12,180)}ms">
+            <span class="chk"></span>
+            <span class="em">${it.emoji}</span>
+            <div class="ib">
+              <div class="iname">${it.name}</div>
+              <div class="imeta">
+                ${it.year?`<span class="iyear">${it.year}</span>`:''}
+                ${it.genres.slice(0,2).map(g=>`<span class="igenre">${g}</span>`).join('')}
+              </div>
+            </div>
+          </div>`;
+        }).join('')}
+      </div></div>`;
+  });
+  if(!total) html=`<div class="empty"><div class="empty-icon">🔍</div>Aucun résultat trouvé.</div>`;
+
+  document.getElementById('scontainer').innerHTML=html;
+  document.querySelectorAll('.item').forEach(el=>{
+    el.addEventListener('click',()=>{
+      const id=parseInt(el.dataset.id);
+      W.has(id)?W.delete(id):W.add(id);
+      save(); stats(); go();
+    });
+  });
+
+  const info=`<strong>${total}</strong> titre${total>1?'s':''} affiché${total>1?'s':''}`;
+  document.getElementById('rinfo').innerHTML=info;
+  stats();
+}
+
+function stats(){
+  const t=DATA.length, w=W.size, l=t-w, p=Math.round(w/t*100);
+  document.getElementById('sttotal').textContent=t;
+  document.getElementById('stwatched').textContent=w;
+  document.getElementById('stleft').textContent=l;
+  document.getElementById('ppct').textContent=p+'%';
+  document.getElementById('pfill').style.width=p+'%';
+}
+
+go();
 </script>
 </body>
 </html>
