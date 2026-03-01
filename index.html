@@ -516,6 +516,7 @@ h1 .sub{display:block;font-size:.19em;font-weight:700;letter-spacing:.28em;text-
     <p class="login-sub">Connecte-toi avec ton compte Google pour accéder à ta collection personnelle</p>
     <div id="google-signin-btn"></div>
     <div class="login-loading" id="login-loading"></div>
+    <div style="margin-top:20px;padding-top:20px;border-top:1px solid var(--border2)"><button onclick="skipLogin()" style="background:none;border:none;color:var(--muted2);cursor:pointer;font-family:'Instrument Sans',sans-serif;font-size:.78rem;text-decoration:underline">Continuer sans connexion →</button></div>
   </div>
 </div>
 
@@ -1444,21 +1445,19 @@ function handleCredentialResponse(response){
 }
 
 async function onUserLoggedIn(){
-  document.getElementById('login-loading').textContent = 'Chargement de ta progression...';
-  // Show user badge
+  showSync('⏳ Chargement...','');
   document.getElementById('user-badge').innerHTML = `
     <img id="user-avatar" src="${currentUser.avatar}" alt="">
     <span id="user-name">${currentUser.name.split(' ')[0]}</span>
     <span class="logout-hint">↗</span>
   `;
   document.getElementById('user-badge').style.display = 'flex';
-  // Load from cloud
+  document.getElementById('login-screen').style.display = 'none';
   const cloudData = await loadFromCloud(currentUser.id);
   if(cloudData){ applyUserData(cloudData); }
-  // Hide login screen
-  document.getElementById('login-screen').style.display = 'none';
   go();
   updateStats();
+  showSync('✓ Connecté en tant que ' + currentUser.name.split(' ')[0], 'ok');
 }
 
 function logout(){
@@ -1550,12 +1549,22 @@ document.getElementById('modal-gear').addEventListener('click', ()=>{
 });
 
 // ===================== INIT =====================
-// Check if already logged in (saved session)
-const savedUser = loadLS('wl_user', null);
-if(savedUser && savedUser.id){
-  currentUser = savedUser;
-  // Init Google silently then load
-  window.addEventListener('load', ()=>{
+function skipLogin(){
+  document.getElementById('login-screen').style.display = 'none';
+}
+
+function startApp(){
+  document.getElementById('login-screen').style.display = 'none';
+  go();
+  updateStats();
+}
+
+// Always start app immediately — Google is optional
+document.addEventListener('DOMContentLoaded', startApp);
+
+// Then init Google in background
+window.addEventListener('load', ()=>{
+  try {
     google.accounts.id.initialize({
       client_id: GOOGLE_CLIENT_ID,
       callback: handleCredentialResponse,
@@ -1564,25 +1573,26 @@ if(savedUser && savedUser.id){
     google.accounts.id.renderButton(document.getElementById('google-signin-btn'), {
       theme:'filled_black', size:'large', text:'signin_with', shape:'pill', locale:'fr'
     });
-    // Try auto login
-    google.accounts.id.prompt((n)=>{
-      if(n.isNotDisplayed()||n.isSkippedMoment()){
-        // Use saved session directly
-        onUserLoggedIn();
-      }
-    });
-  });
-} else {
-  window.addEventListener('load', ()=>{
-    google.accounts.id.initialize({
-      client_id: GOOGLE_CLIENT_ID,
-      callback: handleCredentialResponse
-    });
-    google.accounts.id.renderButton(document.getElementById('google-signin-btn'), {
-      theme:'filled_black', size:'large', text:'signin_with', shape:'pill', locale:'fr'
-    });
-  });
-}
+    // If user was previously logged in, restore silently
+    const savedUser = loadLS('wl_user', null);
+    if(savedUser && savedUser.id){
+      currentUser = savedUser;
+      loadFromCloud(currentUser.id).then(cloudData=>{
+        if(cloudData){ applyUserData(cloudData); go(); updateStats(); }
+        document.getElementById('user-badge').innerHTML = `
+          <img id="user-avatar" src="${currentUser.avatar}" alt="">
+          <span id="user-name">${currentUser.name.split(' ')[0]}</span>
+          <span class="logout-hint">↗</span>
+        `;
+        document.getElementById('user-badge').style.display = 'flex';
+      });
+    } else {
+      // Show login screen only if never logged in before
+      // But app is already running — login screen is just an overlay
+      // Don't block the app, just show a subtle "connect" prompt
+    }
+  } catch(e){ console.log('Google not loaded', e); }
+});
 </script>
 </body>
 </html>
